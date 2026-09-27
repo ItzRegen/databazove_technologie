@@ -1,4 +1,3 @@
--- Active: 1790056471530@@127.0.0.1@5432@superstore
 SELECT * FROM customers;
 
 CREATE DATABASE superstore;
@@ -32,3 +31,9 @@ CREATE TABLE orders (
     FOREIGN KEY (customer_id) REFERENCES customers(customer_id),
     FOREIGN KEY (product_id) REFERENCES products(product_id)
 );
+
+SELECT o.order_id, c.customer_name, o.sales
+FROM orders o
+JOIN customers c ON o.customer_id = c.customer_id
+WHERE o.sales > 500
+ORDER BY o.sales DESC;
