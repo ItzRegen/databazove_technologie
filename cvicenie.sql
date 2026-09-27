@@ -58,3 +58,9 @@ ORDER BY celkova_hodnota_predaja DESC;
 SELECT c.customer_name, o.order_id, o.sales
 FROM customers c
 FULL OUTER JOIN orders o ON c.customer_id = o.customer_id;
+
+SELECT c.region, SUM(o.sales) AS celkova_hodnota_predaja
+FROM customers c
+JOIN orders o ON c.customer_id = o.customer_id
+GROUP BY c.region
+ORDER BY celkova_hodnota_predaja DESC;
