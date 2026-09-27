@@ -83,3 +83,9 @@ JOIN orders o ON c.customer_id = o.customer_id
 GROUP BY c.customer_name
 HAVING SUM(o.sales) > 2000
 ORDER BY celkova_hodnota_nakupov DESC;
+
+SELECT c.region, SUM(o.sales) AS celkova_hodnota_predaja, AVG(o.discount) AS priemerna_zlava, COUNT(o.order_id) AS pocet_objednavok
+FROM customers c
+JOIN orders o ON c.customer_id = o.customer_id
+GROUP BY c.region
+ORDER BY celkova_hodnota_predaja DESC;
