@@ -70,3 +70,9 @@ FROM customers c
 LEFT JOIN orders o ON c.customer_id = o.customer_id
 GROUP BY c.customer_name
 ORDER BY pocet_objednavok DESC;
+
+SELECT p.category, AVG(o.discount) AS priemerna_zlava
+FROM products p
+JOIN orders o ON p.product_id = o.product_id
+GROUP BY p.category
+ORDER BY priemerna_zlava DESC;
