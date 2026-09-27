@@ -48,3 +48,9 @@ FROM customers c
 LEFT JOIN orders o ON c.customer_id = o.customer_id
 GROUP BY c.region
 ORDER BY celkova_hodnota_predaja DESC;
+
+SELECT p.product_name, SUM(o.sales) AS celkova_hodnota_predaja
+FROM products p
+LEFT JOIN orders o ON p.product_id = o.product_id
+GROUP BY p.product_name
+ORDER BY celkova_hodnota_predaja DESC;
