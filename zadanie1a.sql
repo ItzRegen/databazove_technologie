@@ -58,3 +58,18 @@ SELECT
 FROM orders
 GROUP BY DATE_TRUNC('month', order_date)
 ORDER BY month ASC;
+
+# 6. --------------------------------------------
+CREATE INDEX idx_orders_region_category
+ON orders (customer_id, order_date);
+
+SELECT
+    o.order_id,
+    c.customer_name,
+    o.order_date,
+    o.sales,
+    o.profit
+FROM orders o
+JOIN customers c ON o.customer_id = c.customer_id
+WHERE c.region = 'West'
+  AND o.order_date >= '2024-01-01';
