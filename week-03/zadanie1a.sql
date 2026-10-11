@@ -99,19 +99,33 @@ SELECT *
 FROM orders;
 
 # 9. --------------------------------------------
-CREATE OR REPLACE PROCEDURE get_customer_sales(p_customer_id VARCHAR)
+CREATE OR REPLACE PROCEDURE apply_regional_discount(region_name VARCHAR, discount_rate NUMERIC)
 LANGUAGE plpgsql
 AS $$
-DECLARE
-    v_total_sales NUMERIC;
 BEGIN
-    SELECT SUM(sales)
-    INTO v_total_sales
-    FROM orders
-    WHERE customer_id = p_customer_id;
+    UPDATE orders
+    SET sales = sales * (1 - discount_rate)
+    WHERE region = region_name;
 
-    RAISE NOTICE 'Zákazník: %, celkový predaj: %', p_customer_id, v_total_sales;
+    RAISE NOTICE 'Zľava % bola aplikovaná na región %', discount_rate, region_name;
 END;
 $$;
 
 CALL get_customer_sales('C001');
+
+# 10. --------------------------------------------
+CREATE OR REPLACE PROCEDURE apply_regional_discount(region_name VARCHAR, discount_rate NUMERIC)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    UPDATE orders o
+    SET sales = o.sales * (1 - discount_rate)
+    FROM customers c
+    WHERE o.customer_id = c.customer_id
+      AND c.region = region_name;
+
+    RAISE NOTICE 'Zľava % bola aplikovaná na región %', discount_rate, region_name;
+END;
+$$;
+
+CALL apply_regional_discount('West', 0.10);
