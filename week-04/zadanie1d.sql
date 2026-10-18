@@ -99,3 +99,22 @@ SELECT
     ) AS pct_of_category
 FROM product_sales
 ORDER BY category, pct_of_category DESC;
+
+# 6. --------------------------------------------
+WITH order_dates AS (
+    SELECT
+        c.customer_id,
+        c.customer_name,
+        o.order_date,
+        MAX(o.order_date) OVER (PARTITION BY c.customer_id) AS last_order_date,
+        MAX(o.order_date) OVER () AS latest_order_date
+    FROM customers c
+    JOIN orders o ON c.customer_id = o.customer_id
+)
+SELECT DISTINCT
+    customer_id,
+    customer_name,
+    last_order_date
+FROM order_dates
+WHERE last_order_date < latest_order_date - INTERVAL '90 days'
+ORDER BY last_order_date ASC;
