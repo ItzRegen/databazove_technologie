@@ -119,3 +119,23 @@ SELECT
     NTILE(4) OVER (ORDER BY total_amount DESC) AS sales_quartile
 FROM customer_totals
 ORDER BY total_amount DESC;
+
+# 7. --------------------------------------------
+WITH monthly_sales AS (
+    SELECT
+        country,
+        DATE_TRUNC('month', invoice_date)::DATE AS month,
+        SUM(quantity * unit_price) AS total_amount
+    FROM retail_sales
+    GROUP BY country, DATE_TRUNC('month', invoice_date)
+)
+SELECT
+    country,
+    month,
+    total_amount,
+    NTILE(4) OVER (
+        PARTITION BY country
+        ORDER BY total_amount DESC
+    ) AS sales_quartile
+FROM monthly_sales
+ORDER BY country ASC, month ASC;
